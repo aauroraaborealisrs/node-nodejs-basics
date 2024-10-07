@@ -2,7 +2,7 @@ import { promises } from 'fs';
 import { join } from 'path';
 
 const create = async () => {
-    const filePath = join(process.cwd(), 'files', 'fresh.txt');
+    const filePath = join(process.cwd(), 'src', 'fs', 'files', 'fresh.txt'); 
 
     try {
         await promises.access(filePath);
@@ -11,7 +11,7 @@ const create = async () => {
         if (error.code !== 'ENOENT') {
             throw error;
         }
-        await promises.writeFile(filePath, 'I am fresh and young', 'utf8');
+        await promises.writeFile(filePath, 'I am fresh and young', 'utf8'); 
         console.log('File created successfully!');
     }
 };

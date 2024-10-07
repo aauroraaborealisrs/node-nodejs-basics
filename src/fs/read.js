@@ -2,14 +2,13 @@ import { promises } from 'fs';
 import { join } from 'path';
 
 const read = async () => {
-    const filePath = join(process.cwd(), 'files', 'fileToRead.txt');
-
+    const filePath = join(process.cwd(), 'src', 'fs', 'files', 'fileToRead.txt'); 
     try {
-        await promises.access(filePath);
-        const content = await promises.readFile(filePath, 'utf8');
-        console.log(content);
+        await promises.access(filePath); 
+        const content = await promises.readFile(filePath, 'utf8'); 
+        console.log(content); 
     } catch (error) {
-        throw new Error('FS operation failed');
+        throw new Error('FS operation failed'); 
     }
 };
 
