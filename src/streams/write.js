@@ -1,18 +1,25 @@
 import { createWriteStream } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 const write = async () => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const filePath = join(__dirname, 'files', 'fileToWrite.txt');
+    
+    const writableStream = createWriteStream(filePath, { encoding: 'utf-8' });
 
-    const filePath = join(__dirname, 'files', 'fileToWrite.txt'); 
-    const writeStream = createWriteStream(filePath, 'utf8'); 
-    process.stdin.pipe(writeStream); 
+    console.log('Enter text to write to the file (press Ctrl+C to complete input):');
+    
+    process.stdin.on('data', (chunk) => {
+        writableStream.write(chunk.toString().trim() + '\n');  
+    });
 
-    writeStream.on('error', (err) => {
-        console.error('Error writing to file:', err.message);
+    process.stdin.on('end', () => {
+        writableStream.end();
+    });
+
+    writableStream.on('error', (err) => {
+        console.error('Error writing to file:', err);
     });
 };
 

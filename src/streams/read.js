@@ -1,16 +1,23 @@
 import { createReadStream } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 const read = async () => {
-    const __filename = fileURLToPath(import.meta.url); 
-    const __dirname = dirname(__filename); 
-    const filePath = join(__dirname, 'files', 'fileToRead.txt'); 
-    const stream = createReadStream(filePath, 'utf8');
-    stream.pipe(process.stdout); 
-    stream.on('error', (err) => {
-        console.error('Error reading the file:', err.message);
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const filePath = join(__dirname, 'files', 'fileToRead.txt');
+    
+    const readableStream = createReadStream(filePath, 'utf-8');
+    
+    readableStream.on('data', (chunk) => {
+        process.stdout.write(chunk);  
+    });
+
+    readableStream.on('end', () => {
+        console.log('\n');
+    });
+
+    readableStream.on('error', (err) => {
+        console.error('Error reading file:', err);
     });
 };
 
